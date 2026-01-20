@@ -182,7 +182,6 @@ const App: React.FC = () => {
           highScore={currentUser.highScore}
           top3={leaderboard.slice(0, 3)}
           user={currentUser}
-          onLogout={() => { db.session.clear(); setCurrentUser(null); setScreen('AUTH'); }}
         />
       )}
 
