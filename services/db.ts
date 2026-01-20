@@ -1,6 +1,16 @@
 
 import { UserProfile, ScoreEntry, FeedbackEntry, GameState } from '../types';
-import { database, ref, set, get, update, remove } from './firebase';
+
+// Firebase sync - will fail gracefully in offline mode
+const syncToFirebase = async (path: string, data: any) => {
+  try {
+    // Tenta importar e sincronizar com Firebase se disponível
+    const { database, ref, set } = await import('./firebase');
+    await set(ref(database, path), data);
+  } catch (error) {
+    // Silent fail - continua funcionando com localStorage
+  }
+};
 
 const STORAGE_KEYS = {
   USERS: 'tank_strike_users_v3',
@@ -8,26 +18,6 @@ const STORAGE_KEYS = {
   SESSION: 'tank_strike_session_v3',
   FEEDBACK: 'tank_strike_feedback_v3',
   GAME_STATE: 'tank_strike_game_state_v3'
-};
-
-// Função auxiliar para sincronizar com Firebase
-const syncToFirebase = async (path: string, data: any) => {
-  try {
-    await set(ref(database, path), data);
-  } catch (error) {
-    console.log('Firebase sync skipped (offline mode):', error);
-  }
-};
-
-// Função auxiliar para buscar do Firebase
-const getFromFirebase = async (path: string) => {
-  try {
-    const snapshot = await get(ref(database, path));
-    return snapshot.exists() ? snapshot.val() : null;
-  } catch (error) {
-    console.log('Firebase fetch failed (offline mode):', error);
-    return null;
-  }
 };
 
 export const db = {
