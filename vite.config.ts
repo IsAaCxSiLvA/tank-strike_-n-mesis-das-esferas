@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     return {
-      base: '/tank-strike_-nêmesis-das-esferas/',
+      base: '/tank-strike_-n-mesis-das-esferas/',
       server: {
         port: 3000,
         host: '0.0.0.0',
