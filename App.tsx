@@ -93,6 +93,13 @@ const App: React.FC = () => {
     setScreen('MENU');
   };
 
+  const handleLogout = () => {
+    setCurrentUser(null);
+    db.session.clear();
+    setGameState(DEFAULT_GAME_STATE);
+    setScreen('AUTH');
+  };
+
   const handleUpdateProfile = async (updatedUser: UserProfile) => {
     const result = await db.users.update(updatedUser.username, updatedUser);
     
@@ -171,6 +178,7 @@ const App: React.FC = () => {
           onShowCredits={() => setScreen('CREDITS')}
           onShowProfile={() => setScreen('PROFILE')}
           onShowFeedback={() => setScreen('FEEDBACK')}
+          onLogout={handleLogout}
           highScore={currentUser.highScore}
           top3={leaderboard.slice(0, 3)}
           user={currentUser}

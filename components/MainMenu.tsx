@@ -103,9 +103,10 @@ const MainMenu: React.FC<MainMenuProps> = ({
           <div className="h-full bg-emerald-500 transition-all duration-1000 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]" style={{ width: `${xpPct}%` }}></div>
         </div>
         
-        <div className="mt-4 flex justify-between opacity-30">
+        <div className="mt-4 flex justify-between opacity-30 gap-2">
            <button onClick={onShowFeedback} className="text-[8px] sm:text-[10px] font-black text-zinc-600 hover:text-amber-500 uppercase tracking-[0.2em]">Protocolo_Erro</button>
            <button onClick={onShowCredits} className="text-[8px] sm:text-[10px] font-black text-zinc-600 hover:text-blue-500 uppercase tracking-[0.2em]">Créditos_Dev</button>
+           <button onClick={onLogout} className="text-[8px] sm:text-[10px] font-black text-zinc-600 hover:text-red-500 uppercase tracking-[0.2em]">Sair_Sessão</button>
         </div>
       </div>
     </div>
