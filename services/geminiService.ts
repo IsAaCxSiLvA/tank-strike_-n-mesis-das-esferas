@@ -1,7 +1,9 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Usar variável de ambiente ou fallback
+const apiKey = (process.env.API_KEY || import.meta.env.VITE_GEMINI_API_KEY || 'demo-key') as string;
+const ai = new GoogleGenAI({ apiKey });
 
 export const getCommanderReport = async (score: number, highScore: number): Promise<string> => {
   try {
