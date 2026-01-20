@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { ScoreEntry, UserProfile, GameMode } from '../types';
-import { getMilitaryRank, getXPForNextLevel } from '../App';
+import { getMilitaryRank, getXPForNextLevel } from '../gameConstants';
 
 interface MainMenuProps {
   onPlay: (mode: GameMode) => void;

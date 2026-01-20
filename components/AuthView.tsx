@@ -14,10 +14,15 @@ const AuthView: React.FC<AuthViewProps> = ({ onSuccess }) => {
   const [error, setError] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
+  React.useEffect(() => {
+    console.log('AuthView mounted - ready for login');
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setIsProcessing(true);
+    console.log('Login attempt:', username);
 
     try {
       if (username.length < 3 || password.length < 4) {

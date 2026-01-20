@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { ScoreEntry } from '../types';
-import { getMilitaryRank } from '../App';
+import { getMilitaryRank } from '../gameConstants';
 
 interface RankingViewProps {
   leaderboard: ScoreEntry[];

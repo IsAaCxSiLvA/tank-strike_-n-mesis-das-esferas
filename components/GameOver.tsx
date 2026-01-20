@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { getXPForNextLevel, getMilitaryRank } from '../App';
+import { getXPForNextLevel, getMilitaryRank } from '../gameConstants';
 
 interface GameOverProps {
   score: number;

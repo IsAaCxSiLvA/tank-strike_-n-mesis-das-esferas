@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { UserProfile } from '../types';
-import { getMilitaryRank, getXPForNextLevel, MILITARY_HIERARCHY } from '../App';
+import { getMilitaryRank, getXPForNextLevel, MILITARY_HIERARCHY } from '../gameConstants';
 import { db } from '../services/db';
 
 interface ProfileViewProps {
