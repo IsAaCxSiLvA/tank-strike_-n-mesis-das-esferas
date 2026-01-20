@@ -1,5 +1,6 @@
 
 import { UserProfile, ScoreEntry, FeedbackEntry, GameState } from '../types';
+import { database, ref, set, get, update, remove } from './firebase';
 
 const STORAGE_KEYS = {
   USERS: 'tank_strike_users_v3',
@@ -7,6 +8,26 @@ const STORAGE_KEYS = {
   SESSION: 'tank_strike_session_v3',
   FEEDBACK: 'tank_strike_feedback_v3',
   GAME_STATE: 'tank_strike_game_state_v3'
+};
+
+// Função auxiliar para sincronizar com Firebase
+const syncToFirebase = async (path: string, data: any) => {
+  try {
+    await set(ref(database, path), data);
+  } catch (error) {
+    console.log('Firebase sync skipped (offline mode):', error);
+  }
+};
+
+// Função auxiliar para buscar do Firebase
+const getFromFirebase = async (path: string) => {
+  try {
+    const snapshot = await get(ref(database, path));
+    return snapshot.exists() ? snapshot.val() : null;
+  } catch (error) {
+    console.log('Firebase fetch failed (offline mode):', error);
+    return null;
+  }
 };
 
 export const db = {
@@ -40,6 +61,10 @@ export const db = {
       };
       users.push(newUser);
       localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+      
+      // Salvar no Firebase
+      await syncToFirebase(`users/${newUser.username}`, newUser);
+      
       await db.ranking.sync(newUser);
       return newUser;
     },
@@ -82,6 +107,9 @@ export const db = {
       };
       users[idx] = updatedUser;
       localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+      
+      // Salvar no Firebase
+      await syncToFirebase(`users/${username}`, updatedUser);
       
       const session = db.session.get();
       if (session?.username === username) {
@@ -178,6 +206,9 @@ export const db = {
       }
       
       localStorage.setItem(STORAGE_KEYS.RANKING, JSON.stringify(ranking));
+      
+      // Salvar no Firebase
+      await syncToFirebase(`ranking/${user.username}`, newEntry);
     },
 
     getTop: (): ScoreEntry[] => {
@@ -199,6 +230,10 @@ export const db = {
       };
       all.push(newEntry);
       localStorage.setItem(STORAGE_KEYS.FEEDBACK, JSON.stringify(all));
+      
+      // Salvar no Firebase
+      await syncToFirebase(`feedback/${newEntry.id}`, newEntry);
+      
       return newEntry;
     }
   },
