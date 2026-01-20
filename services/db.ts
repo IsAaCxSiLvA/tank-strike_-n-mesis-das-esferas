@@ -1,17 +1,6 @@
 
 import { UserProfile, ScoreEntry, FeedbackEntry, GameState } from '../types';
 
-// Firebase sync - will fail gracefully in offline mode
-const syncToFirebase = async (path: string, data: any) => {
-  try {
-    // Tenta importar e sincronizar com Firebase se disponível
-    const { database, ref, set } = await import('./firebase');
-    await set(ref(database, path), data);
-  } catch (error) {
-    // Silent fail - continua funcionando com localStorage
-  }
-};
-
 const STORAGE_KEYS = {
   USERS: 'tank_strike_users_v3',
   RANKING: 'tank_strike_ranking_v3',
@@ -51,10 +40,6 @@ export const db = {
       };
       users.push(newUser);
       localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-      
-      // Salvar no Firebase
-      await syncToFirebase(`users/${newUser.username}`, newUser);
-      
       await db.ranking.sync(newUser);
       return newUser;
     },
@@ -97,9 +82,6 @@ export const db = {
       };
       users[idx] = updatedUser;
       localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-      
-      // Salvar no Firebase
-      await syncToFirebase(`users/${username}`, updatedUser);
       
       const session = db.session.get();
       if (session?.username === username) {
@@ -196,9 +178,6 @@ export const db = {
       }
       
       localStorage.setItem(STORAGE_KEYS.RANKING, JSON.stringify(ranking));
-      
-      // Salvar no Firebase
-      await syncToFirebase(`ranking/${user.username}`, newEntry);
     },
 
     getTop: (): ScoreEntry[] => {
@@ -220,10 +199,6 @@ export const db = {
       };
       all.push(newEntry);
       localStorage.setItem(STORAGE_KEYS.FEEDBACK, JSON.stringify(all));
-      
-      // Salvar no Firebase
-      await syncToFirebase(`feedback/${newEntry.id}`, newEntry);
-      
       return newEntry;
     }
   },
